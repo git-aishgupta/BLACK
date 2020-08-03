@@ -1,0 +1,27 @@
+Command to run the file - 
+python3 main.py
+
+API runs at port - 
+https://localhost:5000
+
+Installations - 
+1. Neo4j Driver
+python -m pip install neo4j
+
+2. Access-Control-Allow-Origin(CORS)
+pip3 install -U flask-cors
+
+Rules - 
+1. Never commit credentials.py file.
+2. Always format the code before commiting.
+3. Naming Convention - CamelCase
+4. Remove unused variables.
+5. Close resources you have opened. For example - 
+dbConnection.close()
+
+Clean code guidelines -
+1. Always use constants for hard-coded values. For example - 
+HELLO_TEAM = "Hello Team!"
+2. Class Name - DbConnection - initials capital
+3. Method Name - getData - first initial small, rest capital
+
