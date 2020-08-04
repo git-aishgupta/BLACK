@@ -24,4 +24,9 @@ Clean code guidelines -
 HELLO_TEAM = "Hello Team!"
 2. Class Name - DbConnection - initials capital
 3. Method Name - getData - first initial small, rest capital
+4. Create separate class for each functionality under Classes folder
+5. Use meaninful names for class/methods/variables
 
+GITHUB -
+1. Commit format
+[DDMMYY]-Message(max 30 characters)
