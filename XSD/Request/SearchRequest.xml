@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="unqualified">
+   <resources base="http://localhost:5000/aifse/ipmmc/v1/">
+      <resource path="searchPart">
+         <method name="POST" id="searchPartRequest">
+            <xs:element name="data">
+               <xs:complexType>
+                  <xs:sequence>
+                     <xs:element name="input" type="xs:string" minOccurs="0" />
+                     <xs:element name="filter" type="filterList" nillable="true"/>
+                     <xs:element name="category" type="categoryList" nillable="true"/>
+                     <xs:element name="sortBy" type="sortByList" nillable="true"/>
+                  </xs:sequence>
+               </xs:complexType>
+            </xs:element>
+            <xs:element name="filterList">
+               <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                     <xs:enumeration value="title" />
+                     <xs:enumeration value="radius" />
+                  </xs:restriction>
+               </xs:simpleType>
+            </xs:element>
+            <xs:element name="categoryList">
+               <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                     <xs:enumeration value="nut" />
+                     <xs:enumeration value="bolt" />
+                  </xs:restriction>
+               </xs:simpleType>
+            </xs:element>
+            <xs:element name="sortByList">
+               <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                     <xs:enumeration value="title" />
+                     <xs:enumeration value="radius" />
+                  </xs:restriction>
+               </xs:simpleType>
+            </xs:element>
+         </method>
+      </resource>
+   </resources>
+</xs:schema>
+
+<!-- Sample Json Request -->
+<!-- {
+    "data": {
+        "searchPart" : {
+            "input" : "Hex Flang Nut",
+            "filter": "title",
+            "category":"nut",
+            "soryBy":null
+        }
+    }
+} -->
+
+Response - 
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="data">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element type="xs:string" name="status"/>
+        <xs:element type="xs:integer" name="statusCode"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

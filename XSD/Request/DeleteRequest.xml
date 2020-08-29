@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified">
+   <resources base="http://localhost:5000/aifse/ipmmc/v1/">
+      <resource path="deletePart">
+         <method name="POST" id="deletePartRequest">
+            <xs:element name="root">
+               <xs:complexType>
+                  <xs:sequence>
+                     <xs:element name="data">
+                        <xs:complexType>
+                           <xs:sequence>
+                              <xs:element name="partDetails" type="PartDetails" />
+                           </xs:sequence>
+                        </xs:complexType>
+                     </xs:element>
+                  </xs:sequence>
+               </xs:complexType>
+               <xs:element name="PartDetails">
+                  <xs:complexType>
+                     <xs:sequence>
+                        <xs:element type="xs:string" name="category" />
+                        <xs:element type="xs:float" name="radius" />
+                        <xs:element type="xs:string" name="title" minOccurs="0" />
+                     </xs:sequence>
+                  </xs:complexType>
+               </xs:element>
+            </xs:element>
+         </method>
+      </resource>
+   </resources>
+</xs:schema>
+
+<!-- Sample Json Request -->
+{
+    "data": {
+    "partDetails": {
+        "title": "Hex Flang Nut",
+        "category": "nut",
+        "radius": 2.0
+        }
+    }
+}

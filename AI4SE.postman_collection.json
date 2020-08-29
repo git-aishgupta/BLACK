@@ -1,0 +1,103 @@
+{
+	"info": {
+		"_postman_id": "d4277945-8d48-4aae-bf38-c9dcaba52774",
+		"name": "AI4SE",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Delete Part",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"data\": {\n    \"partDetail\": {\n        \"title\": \"Hex Flang Nut\",\n        \"category\": \"nut\",\n        \"radius\": 2.0\n        }\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/aifse/ipmmc/v1/deletePart",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"aifse",
+						"ipmmc",
+						"v1",
+						"deletePart"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search Part",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"data\": {\n        \"searchPart\" : {\n            \"input\" : \"Hex Flang Nut\",\n            \"filter\": \"title\",\n            \"category\":\"nut\",\n            \"soryBy\":null\n        }\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/aifse/ipmmc/v1/searchPart",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"aifse",
+						"ipmmc",
+						"v1",
+						"searchPart"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Pagination",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"data\" : {\n       \"pagination\" : {\n            \"offset\":5,\n        \"pageNumber\":2\n       }\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5000/aifse/ipmmc/v1/pagination",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"aifse",
+						"ipmmc",
+						"v1",
+						"pagination"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

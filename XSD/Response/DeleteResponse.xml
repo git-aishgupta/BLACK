@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified">
+   <resources base="http://localhost:5000/aifse/ipmmc/v1/">
+      <resource path="deletePart">
+         <method name="POST" id="deletePartResponse">
+            <xs:element name="root">
+               <xs:complexType>
+                  <xs:sequence>
+                     <xs:element type="xs:string" name="data" nillable="true" />
+                     <xs:element type="xs:integer" name="statusCode" />
+                     <xs:element type="xs:string" name="statusMessage" />
+                  </xs:sequence>
+               </xs:complexType>
+            </xs:element>
+         </method>
+      </resource>
+   </resources>
+</xs:schema>
+
+<!-- Sample Json Response -->
+<!-- {
+    "data": null,
+    "statusCode":200,
+    "statusMessage":"Success"
+}
+} -->
