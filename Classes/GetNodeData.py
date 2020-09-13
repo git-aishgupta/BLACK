@@ -1,8 +1,8 @@
 from Classes.DBConnection import DBConnection
-import Credentials
+from Utility.Credentials import *
 
 dbConnection = DBConnection(
-    Credentials.Neo4J_URI, Credentials.Neo4J_Username, Credentials.Neo4J_Password
+    Neo4J_URI, Neo4J_Username, Neo4J_Password
 )
 
 

@@ -1,5 +1,7 @@
+import json
 from neo4j import GraphDatabase
-import Queries, json
+
+import Utility.Queries
 
 
 class DBConnection:

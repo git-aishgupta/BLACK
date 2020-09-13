@@ -1,0 +1,6 @@
+URI_BASE = "/aifse/ipmmc/v1/"
+HELLO_TEAM = "Hello Team!"
+SUCCESS_MESSAGE = "Success"
+ERROR_MESSAGE = "Error"
+SUCCESS_CODE = "S000"
+ERROR_CODE = "E000"
