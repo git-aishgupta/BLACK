@@ -12,7 +12,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"data\": {\n    \"partDetail\": {\n        \"title\": \"Hex Flang Nut\",\n        \"category\": \"nut\",\n        \"radius\": 2.0\n        }\n    }\n}",
+					"raw": "{\n    \"data\": {\n    \"partDetail\": {\n        \"reference\": \"VKM8\"\n        }\n    }\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -94,7 +94,8 @@
 						"v1",
 						"pagination"
 					]
-				}
+				},
+				"description": "returns limited data by performing pagination opearation by sending offset and pageNumber parameters."
 			},
 			"response": []
 		}

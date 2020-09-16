@@ -1,26 +1,28 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified" elementFormDefault="qualified">
-   <resources base="http://localhost:5000/aifse/ipmmc/v1/">
-      <resource path="deletePart">
-         <method name="POST" id="deletePartResponse">
-            <xs:element name="root">
-               <xs:complexType>
-                  <xs:sequence>
-                     <xs:element type="xs:string" name="data" nillable="true" />
-                     <xs:element type="xs:integer" name="statusCode" />
-                     <xs:element type="xs:string" name="statusMessage" />
-                  </xs:sequence>
-               </xs:complexType>
-            </xs:element>
-         </method>
-      </resource>
-   </resources>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="root">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="data">
+          <xs:complexType>
+            <xs:simpleContent>
+              <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="null"/>
+              </xs:extension>
+            </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
+        <xs:element type="xs:string" name="statusCode"/>
+        <xs:element type="xs:string" name="statusMessage"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
 </xs:schema>
 
-<!-- Sample Json Response -->
-<!-- {
-    "data": null,
-    "statusCode":200,
-    "statusMessage":"Success"
+<!-- Sample Json Request -->
+<!-- 
+{
+   "data":null,
+   "statusMessage":"Success",
+   "statusCode":"S000"
 }
-} -->
+-->

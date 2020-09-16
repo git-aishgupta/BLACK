@@ -1,16 +1,20 @@
-from flask import request
 import json
+from flask import request
 
-from Classes.PartDetails import PartDetails
+from Classes.DBConnection import DBConnection
+from Utility.Credentials import *
 
+dbConnection = DBConnection(
+    Neo4J_URI, Neo4J_Username, Neo4J_Password
+)
 
 class DeletePart:
     def partDeletion(self):
         req_data = request.get_json()
-        partDetails = PartDetails()
-        pd = req_data["data"]["partDetails"]
-        reference = pd["title"]
-        partDetails.set_reference(reference)
-        partDetails.set_radius(reference)
-        partDetails.set_title(reference)
-        return partDetails.__dict__
+        pd = req_data["data"]["partDetail"]
+        reference = pd["reference"]
+        result = dbConnection.deletePart(reference)
+        if not result:
+            return None
+        else:
+            return result
