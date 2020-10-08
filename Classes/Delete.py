@@ -8,8 +8,8 @@ dbConnection = DBConnection(
     Neo4J_URI, Neo4J_Username, Neo4J_Password
 )
 
-class DeletePart:
-    def partDeletion(self):
+class Delete:
+    def deletePart(self):
         req_data = request.get_json()
         pd = req_data["data"]["partDetail"]
         reference = pd["reference"]

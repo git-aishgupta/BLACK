@@ -9,30 +9,25 @@
                      <xs:element name="data">
                         <xs:complexType>
                            <xs:sequence>
-                              <xs:element name="partDetails" type="PartDetails" />
+                           <xs:element name="element" maxOccurs="unbounded" minOccurs="0">
+                              <xs:complexType>
+                                 <xs:sequence>
+                                 <xs:element type="xs:string" name="category"/>
+                                 <xs:element type="xs:string" name="manufacturer"/>
+                                 <xs:element type="xs:float" name="radius"/>
+                                 <xs:element type="xs:string" name="reference"/>
+                                 <xs:element type="xs:string" name="title"/>
+                                 </xs:sequence>
+                              </xs:complexType>
+                           </xs:element>
                            </xs:sequence>
                         </xs:complexType>
                      </xs:element>
-                     <xs:element type="xs:integer" name="statusCode" />
-                     <xs:element type="xs:string" name="statusMessage" />
-                  </xs:sequence>
-               </xs:complexType>
-               <xs:element name="PartDetails">
-                  <xs:complexType>
-                     <xs:sequence>
-                        <xs:element name="element" maxOccurs="unbounded" minOccurs="0">
-                           <xs:complexType>
-                              <xs:sequence>
-                                 <xs:element type="xs:string" name="category" />
-                                 <xs:element type="xs:float" name="radius" />
-                                 <xs:element type="xs:string" name="title" />
-                              </xs:sequence>
-                           </xs:complexType>
-                        </xs:element>
+                     <xs:element type="xs:string" name="statusCode"/>
+                     <xs:element type="xs:string" name="statusMessage"/>
                      </xs:sequence>
                   </xs:complexType>
                </xs:element>
-            </xs:element>
          </method>
       </resource>
    </resources>
@@ -40,20 +35,36 @@
 
 <!-- Sample Json Response -->
 <!-- {
-    "data": {
-        "partDetails": [
-            {
-                "title":"Hex Flang Nut",
-                "category": "nut",
-                "radius":2.0
-            },
-            {
-                "title":"Thunder Bolt",
-                "category": "bolt",
-                "radius":3.0
-            }
-        ]
-    }
-    "statusCode":200,
-    "statusMessage":"Success"
+    "data": [
+        {
+            "reference": "07260-05",
+            "radius": 2.5,
+            "category": "NUT",
+            "title": "HEXAGON NUT 1.5XD HIGH M05 CARBON STEEL, DIN6330, SW=9",
+            "manufacturer": "norelem"
+        },
+        {
+            "reference": "07260-06",
+            "radius": 3.0,
+            "category": "NUT",
+            "title": "HEXAGON NUT 1.5XD HIGH M06 CARBON STEEL, DIN6330, SW=10",
+            "manufacturer": "norelem"
+        },
+        {
+            "reference": "07260-08",
+            "radius": 4.0,
+            "category": "NUT",
+            "title": "HEXAGON NUT 1.5XD HIGH M08 STAINLESS STEEL, DIN6330, SW=13",
+            "manufacturer": "norelem"
+        },
+        {
+            "reference": "07260-08",
+            "radius": 4.0,
+            "category": "NUT",
+            "title": "HEXAGON NUT 1.5XD HIGH M08 CARBON STEEL, DIN6330, SW=13",
+            "manufacturer": "norelem"
+        }
+    ],
+    "statusMessage": "Success",
+    "statusCode": "S000"
 } -->

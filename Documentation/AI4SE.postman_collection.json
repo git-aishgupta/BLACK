@@ -69,12 +69,15 @@
 		},
 		{
 			"name": "Pagination",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
-				"method": "POST",
+				"method": "GET",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"data\" : {\n       \"pagination\" : {\n            \"offset\":5,\n        \"pageNumber\":2\n       }\n    }\n}",
+					"raw": "",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -82,7 +85,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:5000/aifse/ipmmc/v1/pagination",
+					"raw": "http://localhost:5000/aifse/ipmmc/v1/pagination?offset=0&limit=4",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -93,6 +96,16 @@
 						"ipmmc",
 						"v1",
 						"pagination"
+					],
+					"query": [
+						{
+							"key": "offset",
+							"value": "0"
+						},
+						{
+							"key": "limit",
+							"value": "4"
+						}
 					]
 				},
 				"description": "returns limited data by performing pagination opearation by sending offset and pageNumber parameters."
