@@ -6,6 +6,7 @@ from flask_cors import CORS
 from Classes.Delete import Delete
 from Classes.Pagination import Pagination
 from Utility.JsonResponse import JsonResponse
+from Classes.StepFile import StepFile
 from Utility.Constants import *
 
 app = Flask(__name__)
@@ -20,6 +21,11 @@ def getDeletePartRequest():
 def getPaginationRequest():
     data = Pagination().getPagination()
     return JsonResponse.getResponse(data, SUCCESS_MESSAGE, SUCCESS_CODE)
+
+@app.route(URI_BASE + "/stepfile", methods=["POST"])
+def getStepFileRequest():
+    data = StepFile().importStepFile()
+    return "Hello"
 
 if __name__ == "__main__":
     app.run(debug=True)
