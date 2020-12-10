@@ -1,8 +1,13 @@
 from googleapiclient.http import MediaFileUpload
 from Classes.Google import Create_Service
+from flask import request
 
 class StepFile:
-    def importStepFile(self):
+    def uploadStepFile(self):
+        file = request.files['stepfile']
+        file_filename = file.filename
+        file_mimetype = file.mimetype
+        
         CLIENT_SECRET_FILE='client_secrets.json'
         API_NAME = 'drive'
         API_VERSION = 'v3'
@@ -12,8 +17,8 @@ class StepFile:
 
         folder_id = '12E7toFhd_pKKZVVsPbbxIZkePTk8SVoh'
 
-        file_names = ['07260-10.stp']
-        mime_types = ['application/octet-stream']
+        file_names = [file_filename]
+        mime_types = [file_mimetype]
 
         for file_name,mime_type in zip(file_names, mime_types):
             file_metadata = {
@@ -21,7 +26,7 @@ class StepFile:
                 'parents': [folder_id]
             }
 
-            media = MediaFileUpload('./{0}'.format(file_name), mimetype=mime_type)
+            media = MediaFileUpload('./instance/uploads/{0}'.format(file_name), mimetype=mime_type)
 
             service.files().create(
                 body=file_metadata,
