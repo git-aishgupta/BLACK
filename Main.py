@@ -34,8 +34,15 @@ def getPaginationRequest():
 @app.route(URI_BASE + "/stepfileupload", methods=["POST"])
 def getStepFileUploadRequest():
     file = request.files['stepfile']
-    file.save(os.path.join(uploads_dir, secure_filename(file.filename)))
-    data = StepFile().uploadStepFile()
+    try:
+        with open('./instance/uploads/' + file.filename) as f:
+            # file exists
+            print(f)     
+    except IOError:
+        # file not exists
+        file.save(os.path.join(uploads_dir, secure_filename(file.filename)))
+        data = StepFile().uploadStepFile()
+
     return "Hello"
 
 if __name__ == "__main__":

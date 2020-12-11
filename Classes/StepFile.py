@@ -15,6 +15,7 @@ class StepFile:
 
         service = Create_Service(CLIENT_SECRET_FILE, API_NAME, API_VERSION, SCOPES)
 
+        # id of the google drive folder in which you want to save the file. Fetch it from the folder URL.
         folder_id = '12E7toFhd_pKKZVVsPbbxIZkePTk8SVoh'
 
         file_names = [file_filename]
@@ -26,6 +27,7 @@ class StepFile:
                 'parents': [folder_id]
             }
 
+            # Upload file to GDrive from local storage at /instance/uploads/filename
             media = MediaFileUpload('./instance/uploads/{0}'.format(file_name), mimetype=mime_type)
 
             service.files().create(
