@@ -37,13 +37,13 @@ def getStepFileUploadRequest():
     try:
         with open('./instance/uploads/' + file.filename) as f:
             # file exists
-            print(f)     
+            return JsonResponse.getResponse(DUPLICATE_PART, ERROR_MESSAGE, ERROR_CODE)  
     except IOError:
         # file not exists
         file.save(os.path.join(uploads_dir, secure_filename(file.filename)))
-        data = StepFile().uploadStepFile()
+        StepFile().uploadStepFile()
 
-    return "Hello"
+    return JsonResponse.getResponse(UPLOAD_SUCCESSFUL, SUCCESS_MESSAGE, SUCCESS_CODE)
 
 if __name__ == "__main__":
     app.run(debug=True)

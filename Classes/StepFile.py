@@ -30,8 +30,12 @@ class StepFile:
             # Upload file to GDrive from local storage at /instance/uploads/filename
             media = MediaFileUpload('./instance/uploads/{0}'.format(file_name), mimetype=mime_type)
 
-            service.files().create(
+            file = service.files().create(
                 body=file_metadata,
                 media_body=media,
                 fields='id'
             ).execute()
+
+            # print("file id : " + file.get('id'))
+            # save filename, file id in neo4j database
+            print("Google Drive link: https://drive.google.com/file/d/"+ file.get('id') +"/view")
