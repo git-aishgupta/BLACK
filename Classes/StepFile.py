@@ -2,6 +2,13 @@ from googleapiclient.http import MediaFileUpload
 from Classes.Google import Create_Service
 from flask import request
 
+from Classes.DBConnection import DBConnection
+from Utility.Credentials import *
+
+dbConnection = DBConnection(
+    Neo4J_URI, Neo4J_Username, Neo4J_Password
+)
+
 class StepFile:
     def uploadStepFile(self):
         file = request.files['stepfile']
@@ -38,4 +45,11 @@ class StepFile:
 
             # print("file id : " + file.get('id'))
             # save filename, file id in neo4j database
-            print("Google Drive link: https://drive.google.com/file/d/"+ file.get('id') +"/view")
+            gdriveFileId = file.get('id')
+            result = dbConnection.savePartDetails(file_name, gdriveFileId)
+            if not result:
+                return None
+            else:
+                return result
+
+            print("Google Drive link: https://drive.google.com/file/d/"+ gdriveFileId +"/view")

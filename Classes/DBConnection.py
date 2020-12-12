@@ -13,6 +13,10 @@ class DBConnection:
         with self.driver.session() as session:
             return session.write_transaction(self.getPaginationFromDB, offset, limit)
 
+    def savePartDetails(self, filename, gdriveFileId):
+        with self.driver.session() as session:
+            return session.write_transaction(self.savePartDetailsToDB, filename, gdriveFileId)
+
     @staticmethod
     def deletePartFromDB(session, reference):
         session.run(
@@ -26,4 +30,11 @@ class DBConnection:
         return session.run(
             "match (n:PartDetails) return n order by n.reference skip $offset limit $limit",
             offset = offset, limit = limit,
+        ).data()
+
+    @staticmethod
+    def savePartDetailsToDB(session, filename, gdriveFileId):
+        return session.run(
+            "create (n:PartDetails {reference: $filename , gdrive_id: $gdriveFileId}) merge (gd:GoogleDrive {gdrive_id: $gdriveFileId}) merge (n)-[n_gd:HAS_FILE_ID]-(gd)",
+            filename = filename, gdriveFileId = gdriveFileId,
         ).data()

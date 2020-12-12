@@ -42,8 +42,7 @@ def getStepFileUploadRequest():
         # file not exists
         file.save(os.path.join(uploads_dir, secure_filename(file.filename)))
         StepFile().uploadStepFile()
-
-    return JsonResponse.getResponse(UPLOAD_SUCCESSFUL, SUCCESS_MESSAGE, SUCCESS_CODE)
+        return JsonResponse.getResponse(UPLOAD_SUCCESSFUL, SUCCESS_MESSAGE, SUCCESS_CODE)
 
 if __name__ == "__main__":
     app.run(debug=True)
