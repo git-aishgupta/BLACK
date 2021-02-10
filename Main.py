@@ -43,7 +43,7 @@ def getStepFileUploadRequest():
     os.chdir(LOCAL_DIRECTORY)
 
     if fileExists:
-        return JsonResponse.getResponse(DUPLICATE_PART, ERROR_MESSAGE, ERROR_CODE)
+        return JsonResponse.getResponse(None, DUPLICATE_PART, ERROR_CODE)
     else:
         filename = secure_filename(file.filename)
         file.save(os.path.join(uploads_dir, filename))
