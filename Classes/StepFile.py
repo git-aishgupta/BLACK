@@ -4,62 +4,45 @@ from flask import request
 from functools import partial
 import csv
 import re
+import os
 
 from Classes.DBConnection import DBConnection
 from Utility.Credentials import *
+from Classes.StepData import StepData
+from Utility.Constants import *
 
 dbConnection = DBConnection(
     Neo4J_URI, Neo4J_Username, Neo4J_Password
 )
 
 class StepFile:
-    def uploadStepFile(self):
+
+    def uploadStepFile(self, filename):
         file = request.files['stepfile']
-        filename = file.filename
-        mimetype = file.mimetype
-        
+        StepData.set_filename(self, filename)
+        fileSupported = StepFile.stepFileHeaders(self)
 
-        uploadedFile = StepFile.googleDriveFileUpload(self,filename,mimetype)
-        gdriveFileId = uploadedFile.get('id')
-
-        # fetch important data out of STEP file
-        manifoldSolidBrepCount = 0
-        totalPlaneSurfaces = -2
-        with open('./instance/uploads/'+filename) as openfileobject:
-            for line in openfileobject:
-                if "FILE_DESCRIPTION" in line:
-                    fileDescription = re.search(r'\(\((.*?)\)(.*?)\)',line).group(1).split(",")[0]
-                elif "MANIFOLD_SOLID_BREP" in line:
-                    manifoldSolidBrepCount = manifoldSolidBrepCount + 1
-                elif "=PLANE(" in line:
-                    totalPlaneSurfaces = totalPlaneSurfaces + 1
-
-        if manifoldSolidBrepCount > 1:
-            print(manifoldSolidBrepCount)
+        if not fileSupported:
+            os.chdir(FILE_DIRECTORY)
+            os.remove(filename)
             return None
         else:
-            print("success brep")
-        
-        if totalPlaneSurfaces == 4:
-            category = "SQUARE NUT"
-        elif totalPlaneSurfaces == 6:
-            category = "HEXAGONAL NUT"
-    
-        radius = StepFile.findRadius(self, filename)
+            StepFile.partCategory(self)
+            StepFile.findRadius(self)
+            StepFile.googleDriveFileUpload(self, file)
+            StepFile.updateCSVFile(self)
 
-        StepFile.updateCSVFile(self, fileDescription, filename, 
-                    manifoldSolidBrepCount, totalPlaneSurfaces, radius,category,
-                    gdriveFileId)
-        
+            # Train AI
+            StepFile.aiTrainer(self)
 
-        # save filename, file id in neo4j database
-        result = dbConnection.savePartDetails(filename, gdriveFileId)
-        if not result:
-            return None
-        else:
+            # Save data in Neo4j and return entire data from Neo4j
+            result = dbConnection.savePartDetails(filename, StepData.get_gdriveFileId(self))
+
             return result
     
-    def googleDriveFileUpload(self, filename, mimetype):
+    def googleDriveFileUpload(self, file):
+        filename = StepData.get_filename(self)
+        mimetype = file.mimetype
         service = Create_Service(CLIENT_SECRET_FILE, API_NAME, API_VERSION, SCOPES)
 
         for filename,mimetype in zip([filename], [mimetype]):
@@ -77,9 +60,11 @@ class StepFile:
                 fields='id'
             ).execute()
 
-            return file
+            fileId = file.get('id')
+            StepData.set_gdriveFileId(self, fileId)
 
-    def findRadius(self, filename):
+    def findRadius(self):
+        filename = StepData.get_filename(self)
         with open('./instance/uploads/'+filename) as openfileobject:
             for l, line in enumerate(openfileobject,1):
                 if "=ADVANCED_FACE(" in line:
@@ -108,11 +93,17 @@ class StepFile:
                                 radius = round(float(circle[2]),2)
                                 break
         
-        return radius
+        StepData.set_radius(self, radius)
 
-    def updateCSVFile(self, fileDescription, filename, 
-                    manifoldSolidBrepCount, totalPlaneSurfaces, radius,category,
-                    gdriveFileId):
+    def updateCSVFile(self):
+        fileDescription = StepData.get_fileDescription(self)
+        filename = StepData.get_filename(self)
+        manifoldSolidBrepCount = StepData.get_manifoldSolidBrepCount(self)
+        totalPlaneSurfaces = StepData.get_totalPlaneSurfaces(self)
+        radius = StepData.get_radius(self)
+        category = StepData.get_category(self)
+        gdriveFileId = StepData.get_gdriveFileId(self)
+
         try:
             serialNumber = 1
             with open('PartDetails.csv', 'r') as readFile:
@@ -126,7 +117,7 @@ class StepFile:
 
                     writer.writerow({'SERIAL_NUMBER': serialNumber,"FILE_DESCRIPTION": fileDescription, "FILENAME": filename, 
                     "MANIFOLD_SOLID_BREP": manifoldSolidBrepCount, "PLANE": totalPlaneSurfaces, "RADIUS":radius,"CATEGORY":category,
-                    "GDRIVE_FILE_ID": "https://drive.google.com/file/d/" + gdriveFileId + "/view"})
+                    "GDRIVE_FILE_ID": gdriveFileId})
 
         except FileNotFoundError:
             with open('PartDetails.csv', 'w', newline='') as csvFile:
@@ -136,4 +127,42 @@ class StepFile:
                 writer.writeheader()
                 writer.writerow({'SERIAL_NUMBER': 1,"FILE_DESCRIPTION": fileDescription, "FILENAME": filename, 
                 "MANIFOLD_SOLID_BREP": manifoldSolidBrepCount, "PLANE": totalPlaneSurfaces, "RADIUS":radius,"CATEGORY":category,
-                "GDRIVE_FILE_ID": "https://drive.google.com/file/d/" + gdriveFileId + "/view"})
+                "GDRIVE_FILE_ID": gdriveFileId})
+    
+    def partCategory(self):
+        totalPlaneSurfaces = StepData.get_totalPlaneSurfaces(self)
+        if totalPlaneSurfaces == 4:
+            StepData.set_category(self, SQ_NUT)
+        elif totalPlaneSurfaces == 6:
+            StepData.set_category(self, HEX_NUT)
+
+    def stepFileHeaders(self):
+        filename = filename = StepData.get_filename(self)
+        manifoldSolidBrepCount = 0
+        totalPlaneSurfaces = -2
+        with open('./instance/uploads/'+filename) as openfileobject:
+            for line in openfileobject:
+                if "FILE_DESCRIPTION" in line:
+                    fileDescription = re.search(r'\(\((.*?)\)(.*?)\)',line).group(1).split(",")[0]
+                    StepData.set_fileDescription(self, fileDescription)
+                elif "MANIFOLD_SOLID_BREP" in line:
+                    manifoldSolidBrepCount = manifoldSolidBrepCount + 1
+                    StepData.set_manifoldSolidBrepCount(self, manifoldSolidBrepCount)
+                elif "=PLANE(" in line:
+                    totalPlaneSurfaces = totalPlaneSurfaces + 1
+                    StepData.set_totalPlaneSurfaces(self, totalPlaneSurfaces)
+
+        if manifoldSolidBrepCount > 1:
+            return False
+        else:
+            return True
+        
+
+    def aiTrainer(self):
+        fileDescription = StepData.get_fileDescription(self)
+        filename = StepData.get_filename(self)
+        manifoldSolidBrepCount = StepData.get_manifoldSolidBrepCount(self)
+        totalPlaneSurfaces = StepData.get_totalPlaneSurfaces(self)
+        radius = StepData.get_radius(self)
+        category = StepData.get_category(self)
+        gdriveFileId = StepData.get_gdriveFileId(self)

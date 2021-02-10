@@ -34,26 +34,24 @@ def getPaginationRequest():
 @app.route(URI_BASE + "/stepfileupload", methods=["POST"])
 def getStepFileUploadRequest():
     file = request.files['stepfile']
-
-    os.chdir('/Users/aisgupta/Desktop/BLACK/instance/uploads')
-
+    os.chdir(FILE_DIRECTORY)
     fileExists = False
     for f in os.listdir():
         if file.filename == f:
             fileExists = True
 
-    os.chdir('/Users/aisgupta/Desktop/BLACK')
+    os.chdir(LOCAL_DIRECTORY)
 
-    # if fileExists:
-    #     return JsonResponse.getResponse(DUPLICATE_PART, ERROR_MESSAGE, ERROR_CODE)
-    # else:
-    #     file.save(os.path.join(uploads_dir, secure_filename(file.filename)))
-    #     StepFile().uploadStepFile()
-    #     return JsonResponse.getResponse(UPLOAD_SUCCESSFUL, SUCCESS_MESSAGE, SUCCESS_CODE)
-
-    file.save(os.path.join(uploads_dir, secure_filename(file.filename)))
-    StepFile().uploadStepFile()
-    return JsonResponse.getResponse(UPLOAD_SUCCESSFUL, SUCCESS_MESSAGE, SUCCESS_CODE)
+    if fileExists:
+        return JsonResponse.getResponse(DUPLICATE_PART, ERROR_MESSAGE, ERROR_CODE)
+    else:
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(uploads_dir, filename))
+        data = StepFile().uploadStepFile(filename)
+        if data == None:
+            return JsonResponse.getResponse(data, MULTIPART_STEP_FILE, ERROR_CODE)
+        else:
+            return JsonResponse.getResponse(data, SUCCESS_MESSAGE, SUCCESS_CODE)
 
 if __name__ == "__main__":
     app.run(debug=True)
