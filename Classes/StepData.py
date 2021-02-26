@@ -21,6 +21,9 @@ class StepData:
     def get_gdriveFileId(self):
         return self.gdriveFileId
 
+    def get_serialNumber(self):
+        return self.serialNumber
+
     # setters
     def set_fileDescription(self, fileDescription):
         self.fileDescription = fileDescription
@@ -42,3 +45,6 @@ class StepData:
     
     def set_gdriveFileId(self, gdriveFileId):
         self.gdriveFileId = "https://drive.google.com/file/d/" + gdriveFileId + "/view"
+    
+    def set_serialNumber(self, serialNumber):
+        self.serialNumber = serialNumber

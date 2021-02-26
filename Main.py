@@ -12,6 +12,7 @@ from Classes.StepFile import StepFile
 from Utility.Constants import *
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import  FileStorage
+from Classes.SearchPart import SearchPart
 
 app = Flask(__name__)
 CORS(app)
@@ -31,9 +32,21 @@ def getPaginationRequest():
     data = Pagination().getPagination()
     return JsonResponse.getResponse(data, SUCCESS_MESSAGE, SUCCESS_CODE)
 
+@app.route(URI_BASE + "/searchPart", methods=["POST"])
+def getSearchPartRequest():
+    data = SearchPart().partSearch()
+    return JsonResponse.getResponse(data, SUCCESS_MESSAGE, SUCCESS_CODE)
+
 @app.route(URI_BASE + "/stepfileupload", methods=["POST"])
 def getStepFileUploadRequest():
     file = request.files['stepfile']
+    compareFlag = request.form.get('compareFlag')
+
+    if compareFlag == "true":
+        isCompare = True
+    else:
+        isCompare = False
+
     os.chdir(FILE_DIRECTORY)
     fileExists = False
     for f in os.listdir():
@@ -47,8 +60,14 @@ def getStepFileUploadRequest():
     else:
         filename = secure_filename(file.filename)
         file.save(os.path.join(uploads_dir, filename))
-        data = StepFile().uploadStepFile(filename)
-        if data == None:
+        result = StepFile().uploadStepFile(filename, isCompare)
+        data = result
+        if data is not None:
+            if isCompare:
+                test_tup1 = ('originalPart', 'similarParts', 'accuracy') 
+                data = dict(zip(test_tup1, result))
+        
+        if result == None:
             return JsonResponse.getResponse(data, MULTIPART_STEP_FILE, ERROR_CODE)
         else:
             return JsonResponse.getResponse(data, SUCCESS_MESSAGE, SUCCESS_CODE)

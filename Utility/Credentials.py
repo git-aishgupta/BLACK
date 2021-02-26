@@ -6,7 +6,7 @@ Neo4J_Password = "password"
 
 # Google Drive Configurations
 # id of the google drive folder in which you want to save the file. Fetch it from the folder URL.
-GOOGLE_DRIVE_FOLDER_ID = ''
+GOOGLE_DRIVE_FOLDER_ID = '12E7toFhd_pKKZVVsPbbxIZkePTk8SVoh'
 CLIENT_SECRET_FILE='client_secrets.json'
 API_NAME = 'drive'
 API_VERSION = 'v3'

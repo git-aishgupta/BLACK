@@ -1,5 +1,7 @@
 import json
+import os
 from flask import request
+from Utility.Constants import *
 
 from Classes.DBConnection import DBConnection
 from Utility.Credentials import *
@@ -14,7 +16,10 @@ class Delete:
         pd = req_data["data"]["partDetail"]
         reference = pd["reference"]
         result = dbConnection.deletePart(reference)
-        if not result:
+        os.chdir(FILE_DIRECTORY)
+        os.remove(reference)
+        
+        if result is None:
             return None
         else:
             return result
